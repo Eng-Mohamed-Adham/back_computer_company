@@ -9,7 +9,10 @@ const cors = require('cors')
 const corsOptions = require('./config/corsOptions')
 const connectDB = require('./config/dbConn')
 const mongoose = require('mongoose')
+
+
 const PORT = process.env.PORT || 3500
+
 
 
 connectDB()
@@ -19,6 +22,10 @@ app.use(logger)
 
 app.use(cors(corsOptions))
 
+
+var bodyParser = require('body-parser');
+app.use(bodyParser.json({limit: '50mb'}));
+app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 app.use(express.json())
 
 app.use(cookieParser())
@@ -26,9 +33,12 @@ app.use(cookieParser())
 app.use('/', express.static(path.join(__dirname, 'public')))
 
 app.use('/', require('./routes/root'))
+
 app.use('/auth',require('./routes/authRoutes'))
 app.use('/users', require('./routes/userRoutes'))
 app.use('/notes', require('./routes/noteRoutes'))
+app.use('/parts', require('./routes/partRoutes'))
+app.use('/clients',require('./routes/clientRoutes'))
 
 app.all('*', (req, res) => {
     res.status(404)

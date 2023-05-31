@@ -19,11 +19,13 @@ const getAllUsers = asyncHandler(async (req,res) => {
 //@route POST /users
 //@access Private
 const createNewUser = asyncHandler(async (req,res) => {
-    const {username,password,roles} = req.body
+    
+
+    const {username,password,roles,image} = req.body
 
     //Confirm data
     if(!username || !password || !Array.isArray(roles) || !roles.length){
-        return res.status(400).json({message: 'All filed are required'})
+        return res.status(400).json({message: 'All filed are required...'})
     }
 
     //Check for duplicate
@@ -34,7 +36,7 @@ const createNewUser = asyncHandler(async (req,res) => {
 
     //Hashed password
     const hashedPwd = await bcrypt.hash(password,10) // 10 is salt rounds
-    const userObject = {username,"password": hashedPwd, roles}
+    const userObject = {username,"password": hashedPwd, roles,image}
 
     //Create and store new user
     const user = await User.create(userObject)
@@ -52,10 +54,10 @@ const createNewUser = asyncHandler(async (req,res) => {
 //@route PATCH /users
 //@access Private
 const updateUser = asyncHandler(async (req,res) => {
-    const { id, username, roles, active, password } = req.body
+    const { id, username, roles, active, password,image } = req.body
 
     // Confirm data 
-    if (!id || !username || !Array.isArray(roles) || !roles.length || typeof active !== 'boolean') {
+    if (!id || !username || !Array.isArray(roles) || !roles.length || typeof active !== 'boolean' || !image) {
         return res.status(400).json({ message: 'All fields except password are required' })
     }
 
@@ -77,7 +79,7 @@ const updateUser = asyncHandler(async (req,res) => {
     user.username = username
     user.roles = roles
     user.active = active
-
+    user.image = image
     if (password) {
         // Hash password 
         user.password = await bcrypt.hash(password, 10) // salt rounds 

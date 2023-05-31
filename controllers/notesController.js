@@ -1,5 +1,6 @@
 const Note = require('../models/Note')
 const User = require('../models/User')
+const Client = require('../models/Clients')
 const asyncHandler = require('express-async-handler')
 
 // @desc Get all notes 
@@ -22,6 +23,8 @@ const getAllNotes = asyncHandler(async (req, res) => {
         return { ...note, username: user.username }
     }))
 
+
+
     res.json(notesWithUser)
 })
 
@@ -29,10 +32,10 @@ const getAllNotes = asyncHandler(async (req, res) => {
 // @route POST /notes
 // @access Private
 const createNewNote = asyncHandler(async (req, res) => {
-    const { user, title, text } = req.body
+    const { user, title, text,clientId } = req.body
 
     // Confirm data
-    if (!user || !title || !text) {
+    if (!user || !title || !text || !clientId) {
         return res.status(400).json({ message: 'All fields are required' })
     }
 
@@ -43,7 +46,7 @@ const createNewNote = asyncHandler(async (req, res) => {
         return res.status(409).json({ message: 'Duplicate note title' })
     }
 
-    const noteObject = {user,title,text}
+    const noteObject = {user,title,text,clientId}
     // Create and store the new user 
     const note = await Note.create(noteObject)
 
@@ -59,10 +62,10 @@ const createNewNote = asyncHandler(async (req, res) => {
 // @route PATCH /notes
 // @access Private
 const updateNote = asyncHandler(async (req, res) => {
-    const { id, user, title, text, completed } = req.body
+    const { id, user, title, text, completed,clientId } = req.body
 
     // Confirm data
-    if (!id || !user || !title || !text || typeof completed !== 'boolean') {
+    if (!id || !user || !title || !text || typeof completed !== 'boolean' || !clientId) {
         return res.status(400).json({ message: 'All fields are required' })
     }
 
@@ -85,7 +88,8 @@ const updateNote = asyncHandler(async (req, res) => {
     note.title = title
     note.text = text
     note.completed = completed
-
+    note.clientId = clientId
+    
     const updatedNote = await note.save()
 
     res.json(`'${updatedNote.title}' updated`)
