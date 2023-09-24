@@ -41,7 +41,7 @@ const createNewPart = asyncHandler(async(req,res) => {
 
 
 const updatePart = asyncHandler(async(req,res) => {
-    const {id,name,desc,productiondate,lifespan,count} = req.body
+    const {id,name,desc,productiondate,lifespan,count,} = req.body
 
     // Confirm Data
     if(!id || !name || !desc || !productiondate ){
@@ -56,7 +56,7 @@ const updatePart = asyncHandler(async(req,res) => {
     }
     // Check for duplicate Id
     const duplicate = await Part.findOne({name}).lean().exec()
-
+2
     if(duplicate && duplicate.name !==name){
         return res.status(409).json({message:'You Can Not Change Id'})
     }
@@ -66,8 +66,7 @@ const updatePart = asyncHandler(async(req,res) => {
     part.desc = desc
     part.productiondate = productiondate
     part.lifespan = lifespan
-    part.count = part.count - count
-    part.buy = part.buy + count
+    part.count = count 
     
     const updatePart = await part.save()
     res.json(`'${updatePart.name}' updated `)

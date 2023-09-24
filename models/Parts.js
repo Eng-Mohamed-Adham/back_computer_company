@@ -41,10 +41,6 @@ const partSchema = new mongoose.Schema(
 );
 
 
-// noteSchema.plugin(AutoIncrement, {
-//     inc_field: 'rank',
-//     id: 'rank_counter',
-//     start_seq: 500
-// })
+
 
 module.exports = mongoose.model('Part', partSchema)
