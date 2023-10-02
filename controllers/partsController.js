@@ -66,8 +66,10 @@ const updatePart = asyncHandler(async(req,res) => {
     part.desc = desc
     part.productiondate = productiondate
     part.lifespan = lifespan
-    part.count = count 
     part.buy =  buy
+    part.count = count 
+
+    
     const updatePart = await part.save()
     res.json(`'${updatePart.name}' updated `)
 })
