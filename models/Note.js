@@ -26,6 +26,14 @@ const noteSchema = new mongoose.Schema(
             type:mongoose.Schema.Types.ObjectId,
             required:true,
             ref:'Client'
+        },
+        part:{
+            type:String,
+            
+        },
+        count:{
+            type:Number,
+            default:1
         }
     },
     {

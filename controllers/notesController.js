@@ -32,10 +32,10 @@ const getAllNotes = asyncHandler(async (req, res) => {
 // @route POST /notes
 // @access Private
 const createNewNote = asyncHandler(async (req, res) => {
-    const { user, title, text,clientId } = req.body
+    const { user, title, text,clientId,part,count } = req.body
 
     // Confirm data
-    if (!user || !title || !text || !clientId) {
+    if (!user || !title || !text || !clientId || !part) {
         return res.status(400).json({ message: 'All fields are required' })
     }
 
@@ -46,7 +46,7 @@ const createNewNote = asyncHandler(async (req, res) => {
         return res.status(409).json({ message: 'Duplicate note title' })
     }
 
-    const noteObject = {user,title,text,clientId}
+    const noteObject = {user,title,text,clientId,part,count}
     // Create and store the new user 
     const note = await Note.create(noteObject)
 
@@ -62,10 +62,10 @@ const createNewNote = asyncHandler(async (req, res) => {
 // @route PATCH /notes
 // @access Private
 const updateNote = asyncHandler(async (req, res) => {
-    const { id, user, title, text, completed,clientId } = req.body
+    const { id, user, title, text, completed,clientId,part,count } = req.body
 
     // Confirm data
-    if (!id || !user || !title || !text || typeof completed !== 'boolean' || !clientId) {
+    if (!id || !user || !title || !text || typeof completed !== 'boolean' || !clientId || !part) {
         return res.status(400).json({ message: 'All fields are required' })
     }
 
@@ -77,7 +77,7 @@ const updateNote = asyncHandler(async (req, res) => {
     }
 
     // Check for duplicate title
-    const duplicate = await Note.findOne({ title }).lean().exec()
+    const duplicate = await Note.findOne({ id }).lean().exec()
 
     // Allow renaming of the original note 
     if (duplicate && duplicate?._id.toString() !== id) {
@@ -89,6 +89,8 @@ const updateNote = asyncHandler(async (req, res) => {
     note.text = text
     note.completed = completed
     note.clientId = clientId
+    note.part = part
+    note.count = count
     
     const updatedNote = await note.save()
 

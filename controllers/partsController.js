@@ -16,7 +16,7 @@ const getAllParts = asyncHandler(async(req,res) => {
 
 
 const createNewPart = asyncHandler(async(req,res) => {
-    const {id,name,desc,productiondate,lifespan,count} = req.body
+    const {id,name,desc,productiondate,lifespan,count,buy} = req.body
 
 
     // Confirm Data
@@ -29,7 +29,7 @@ const createNewPart = asyncHandler(async(req,res) => {
             return res.status(409).json({message:'Duplicate Part ID'})
         }
     
-        const partObject = {id,name,desc,productiondate,lifespan,count}
+        const partObject = {id,name,desc,productiondate,lifespan,count,buy}
         const part = await Part.create(partObject)
 
         if(part) {
@@ -41,7 +41,7 @@ const createNewPart = asyncHandler(async(req,res) => {
 
 
 const updatePart = asyncHandler(async(req,res) => {
-    const {id,name,desc,productiondate,lifespan,count,} = req.body
+    const {id,name,desc,productiondate,lifespan,count,buy} = req.body
 
     // Confirm Data
     if(!id || !name || !desc || !productiondate ){
@@ -67,7 +67,7 @@ const updatePart = asyncHandler(async(req,res) => {
     part.productiondate = productiondate
     part.lifespan = lifespan
     part.count = count 
-    
+    part.buy =  buy
     const updatePart = await part.save()
     res.json(`'${updatePart.name}' updated `)
 })

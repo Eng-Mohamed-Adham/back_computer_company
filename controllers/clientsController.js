@@ -18,9 +18,9 @@ const getAllClients = asyncHandler(async (req,res) => {
 
 // POT ** Create A NEW Client
  const createNewClient = asyncHandler(async (req,res) => {
-    const {username,orders,location,phonenumber} = req.body
+    const {username,location,phonenumber} = req.body
         // Confirm Data
-    if(!username  || !orders || !location || !phonenumber){
+    if(!username || !location || !phonenumber){
         return res.status(400).json({message:'All Feilds are Required.>.!'})
     }
     const duplicate = await Client.findOne({phonenumber}).lean().exec()
@@ -29,7 +29,7 @@ const getAllClients = asyncHandler(async (req,res) => {
         return res.status(409).json({message:'Duplicate Client.'})
     }
 
-    const clientObject = {username,orders,location,phonenumber}
+    const clientObject = {username,location,phonenumber}
 
     const newClient = await Client.create(clientObject)
 
@@ -43,9 +43,9 @@ const getAllClients = asyncHandler(async (req,res) => {
 
 //  PATCH ** Update Client
  const updateClient = asyncHandler(async (req,res) => {
-    const {username,orders,active,location,phonenumber,id} = req.body
+    const {username,active,location,phonenumber,id} = req.body
         // Confirm Data
-    if(!username  || !orders || !location || !phonenumber){
+    if(!username  || !location || !phonenumber){
         return res.status(400).json({message:'All Feilds are Required...!'})
     }
         //DUBLICATE CLIENT
@@ -56,7 +56,6 @@ const getAllClients = asyncHandler(async (req,res) => {
 
 
     client.username = username
-    client.orders = orders
     client.active = active
     client.location = location
     client.phonenumber = phonenumber

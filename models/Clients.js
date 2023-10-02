@@ -7,10 +7,6 @@ const clientSchema = mongoose.Schema(
         required:true
     },
 
-    orders:[{
-        type:String,
-        default:null,
-    }],
     active:{
         type:Boolean,
         default:true,
